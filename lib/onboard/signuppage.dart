@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:healthify/utils/app_resources.dart';
 import 'package:healthify/utils/app_input_decoration.dart';
 import 'package:healthify/home_page.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({Key? key}) : super(key: key);
@@ -84,7 +85,15 @@ class _SignUpPageState extends State<SignUpPage> {
                   ),
                   width: MediaQuery.of(context).size.width * 0.9,
                   child: TextButton(
-                      onPressed: () {
+                      onPressed: () async {
+                        await FirebaseAnalytics.instance.logEvent(
+                          name: "SignUp",
+                          parameters: {
+                            "Email": _emailTextEditingController,
+                            "firstName": _firstNameTextEditingController,
+                            "LastName": _lastNameTextEditingController,
+                          },
+                        );
                         handleSignUpInput();
                       },
                       child: Text("Sign Up")),

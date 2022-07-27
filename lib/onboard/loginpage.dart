@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:healthify/utils/app_resources.dart';
 import 'package:healthify/utils/app_input_decoration.dart';
 import 'package:healthify/home_page.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -31,7 +32,6 @@ class _LoginPageState extends State<LoginPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            
             Text(
               AppResources.appName,
               style: TextStyle(fontSize: 48, fontWeight: FontWeight.bold),
@@ -65,7 +65,14 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 width: MediaQuery.of(context).size.width * 0.9,
                 child: TextButton(
-                    onPressed: () {
+                    onPressed: () async {
+                      await FirebaseAnalytics.instance.logEvent(
+                        name: "LogIn",
+                        parameters: {
+                          "Email": _emailTextEditingController,
+                         "Password": _passwordTextEditingController,
+                        },
+                      );
                       handleLoginInput();
                     },
                     child: Text("Login")),
